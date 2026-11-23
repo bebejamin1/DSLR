@@ -1,13 +1,14 @@
 [project]
 name = "dslr"
 version = "0.1.0"
-description = "Add your description here"
+description = "Regression logistic"
 readme = "README.md"
 authors = [
     { email = "beaurainbenjamin1@gmail.com" }
 ]
 requires-python = ">=3.14"
 dependencies = [
+    "fire>=0.7.1",
     "matplotlib>=3.11.2",
 ]
 
@@ -17,3 +18,6 @@ dslr = "dslr:main"
 [build-system]
 requires = ["uv_build>=0.13.1,<0.14.0"]
 build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = ""

@@ -1,6 +1,6 @@
 # aLED
 
-from dslr.parsing import take_theta_file
+from dslr.parsing.parser import take_theta_file
 
 
 # *****************************************************************************
