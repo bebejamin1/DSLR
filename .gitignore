@@ -1,5 +1,5 @@
 # for ours project
-batch_gb.pkl
+batch_gd.pkl
 mini_batch_gd.pkl
 stochastic_gd.pkl
 

@@ -1,4 +1,3 @@
-# aLED
 
 # attribuer la bonne maison de Poudlard à chaque élève à partir de ses notes,
 # avec une précision minimale de 98 %.
@@ -84,8 +83,8 @@ class AlgoDG:
 
 # ========================== MINI BATCH GD ====================================
 
-    def mini_batch_GD(self) -> tuple:
-        t1, t2, t3, t4 = take_theta_file("mini_batch_GD")
+    def mini_batch_gd(self) -> tuple:
+        t1, t2, t3, t4 = take_theta_file("mini_batch_gd")
 
         return (t1, t2, t3, t4)
 
