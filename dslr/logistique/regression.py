@@ -101,17 +101,17 @@ class AlgoDG:
 # *                                                                           *
 
 def predict(value: int) -> int:  # A DETERMINER NE PAS PRENDRE EN COMPTE
-    result = 0
+    result: str = 0
 
-    theta0, theta1 = take_theta_file()
+    algo_names = ["batch_gd", "mini_batch_gd", "stochastic_gd"]
 
-    if (theta0 == 0 or theta1 == 0):
-        print("\n" + "Lancez un learningRate avant tout!" + "\n"
-              "Vos valeurs theta sont à 0")
-        exit()
+    for algo in algo_names:
+        theta1, theta2, theta3, theta4 = take_theta_file(algo)
 
-    normalized_value = value / 100000.0
-    normalized_result = theta0 + (theta1 * normalized_value)
-    result = normalized_result * 10000.0
+        if (theta1 == 0 or theta2 == 0 or theta3 == 0 or theta4 == 0):
+            print("\n" + "Lancez un logreg_train avant tout!" + "\n"
+                  "Vos valeurs theta sont à 0")
+            exit()
 
-    return (int(result))
+    # result sera la maison en fonction du pourcentage de change qui est predit
+    return result
