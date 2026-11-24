@@ -11,7 +11,7 @@ from pathlib import Path
 # *                                                                           *
 
 def _parse_value(val: str):
-    if val is None or val == "":
+    if val is None or val == "" or val.lower() == "nan":
         return None
     try:
         return float(val)
