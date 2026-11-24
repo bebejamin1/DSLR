@@ -29,62 +29,73 @@
 # 1. Batch GD (Obligatoire) Regarde tous les élèves avant de faire un pas.
 # 2. Stochastic GD (Bonus) Fait un pas après chaque élève pris individuellement
 # 3. Mini-batch GD (Bonus) Fait un pas après chaque petit groupe d'élèves
-# (ex: par paquets de 32)
+#    (ex: par paquets de 32)
 
 import os
-import tqdm
+from tqdm import tqdm
 
 from dslr.parsing.parser import take_theta_file, create_theta_file
 
 
 # *****************************************************************************
-# *                         learning_display()                                *
-# *                                                                           *
-
-def logreg_train(data: list) -> None:  # descente stochastique ?? a faire
-    # utilise des petit lot choisi aleatoirement a chaque iteration.
-    "Permet de lancer les different algo de regression"
-    os.system("clear")
-
-    print("\n" + "learningRate()".center(79, " ") + "\n\n")
-    create_theta_file(0.0, 0.0)
-
-    for _ in tqdm(range(10000), desc="Training Process"):
-        theta0, theta1 = learningRate(data)
-        create_theta_file(theta0, theta1)
-
-    print("\nEntraînement terminé! "
-          f"Theta0: {theta0:.4f}, Theta1: {theta1:.4f}")
-    exit()
-
-
-# *****************************************************************************
-# *                            logreg_predict()                               *
-# *                                                                           *
-
-def logreg_predict(value: int) -> int:  # A DETERMINER NE PAS PRENDRE EN COMPTE
-    result = 0
-
-    theta0, theta1 = take_theta_file()
-
-    if (theta0 == 0 or theta1 == 0):
-        print("\n" + "Lancez un learningRate avant tout!" + "\n"
-              "Vos valeurs theta sont à 0")
-        exit()
-
-    normalized_value = value / 100000.0
-    normalized_result = theta0 + (theta1 * normalized_value)
-    result = normalized_result * 10000.0
-
-    return (int(result))
-
-
-# *****************************************************************************
-# *                             learningRate()                                *
+# *                             AlgoDG()                                      *
 # *                                                                           *
 
 LEARNING_RATE = 0.01
 
+
+class AlgoDG:
+    def __init__(self, data: list):
+        self.data = data
+
+# ============================== TRAIN =======================================
+
+    def train(self) -> None:  # descente stochastique ?? a faire
+        # utilise des petit lot choisi aleatoirement a chaque iteration.
+        "Permet de lancer les different algo de regression"
+        os.system("clear")
+
+        print("\n" + "TRAINING".center(79, " ") + "\n\n")
+        algo_names = ["batch_gd", "mini_batch_GD", "stochastic_gd"]
+
+        for algo in algo_names:
+            create_theta_file(0.0, 0.0, 0.0, 0.0, algo)
+
+            for _ in tqdm(range(10000), desc="Training Process"):
+                # theta0, theta1, theta2, theta3 = globals().get(algo)
+                a = getattr(self, algo)
+
+                theta0, theta1, theta2, theta3 = a()
+                # create_theta_file(theta0, theta1, theta2, theta3, algo)
+
+        # print("\nEntraînement terminé! "
+        #       f"Theta0: {theta0:.4f}, Theta1: {theta1:.4f}")
+        exit()
+
+# ============================= BATCH GD ======================================
+
+    def batch_gd(self) -> tuple:
+        print("oui")
+
+        return (0.0, 0.0, 0.0, 0.0)
+        # theta0, theta1 = take_theta_file("batch_gd")
+
+# ========================== MINI BATCH GD ====================================
+
+    def mini_batch_GD(self) -> tuple:
+        print("peu etre")
+        return (0.0, 0.0, 0.0, 0.0)
+
+# ========================== STOCHASTIC GD ====================================
+
+    def stochastic_gd(self) -> tuple:
+        print("non")
+        return (0.0, 0.0, 0.0, 0.0)
+
+
+# *****************************************************************************
+# *                                  TEST                                     *
+# *                           a supprimer plus tard                           *
 
 def learningRate(data) -> tuple:  # a ne pas prendre en compte pour linstant
     m = len(data)
@@ -113,3 +124,24 @@ def learningRate(data) -> tuple:  # a ne pas prendre en compte pour linstant
     theta1 = theta1 - tmp1
 
     return (theta0, theta1)
+
+
+# *****************************************************************************
+# *                            logreg_predict()                               *
+# *                                                                           *
+
+def predict(value: int) -> int:  # A DETERMINER NE PAS PRENDRE EN COMPTE
+    result = 0
+
+    theta0, theta1 = take_theta_file()
+
+    if (theta0 == 0 or theta1 == 0):
+        print("\n" + "Lancez un learningRate avant tout!" + "\n"
+              "Vos valeurs theta sont à 0")
+        exit()
+
+    normalized_value = value / 100000.0
+    normalized_result = theta0 + (theta1 * normalized_value)
+    result = normalized_result * 10000.0
+
+    return (int(result))

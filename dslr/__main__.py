@@ -1,15 +1,18 @@
 
 import fire
 
+from dslr.logistique.regression import AlgoDG
+
 
 class DSLR:
 
     def logreg_train(self) -> None:  # a faire avec le dataset_train
         print("cc ma biche lucas")
 
-        # ajouter tri et renvoyer liste ou dictionnaire
+        # ajouter tri et renvoyer list
+        data = []
 
-        # pour que je puisse entrainer mon algo
+        AlgoDG.train(data)
 
     def logreg_predict(self) -> None:  # a faire avec le dataset_test
         print("plus tard a faire apres le train")
