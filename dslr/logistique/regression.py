@@ -100,18 +100,19 @@ class AlgoDG:
 # *                            logreg_predict()                               *
 # *                                                                           *
 
-def predict(value: int) -> int:  # A DETERMINER NE PAS PRENDRE EN COMPTE
-    result: str = 0
+def predict(value: int) -> dict:
 
-    algo_names = ["batch_gd", "mini_batch_gd", "stochastic_gd"]
+    algo_result = {"batch_gd": "", "mini_batch_gd": "", "stochastic_gd": ""}
 
-    for algo in algo_names:
+    for algo in algo_result.keys():
         theta1, theta2, theta3, theta4 = take_theta_file(algo)
 
-        if (theta1 == 0 or theta2 == 0 or theta3 == 0 or theta4 == 0):
-            print("\n" + "Lancez un logreg_train avant tout!" + "\n"
-                  "Vos valeurs theta sont à 0")
-            exit()
+        # if (theta1 == 0 or theta2 == 0 or theta3 == 0 or theta4 == 0):
+        #     print("\n" + "Lancez un logreg_train avant tout!" + "\n"
+        #           "Vos valeurs theta sont à 0")
+        #     exit()
 
-    # result sera la maison en fonction du pourcentage de change qui est predit
-    return result
+        algo_result[algo] = "gryffondor"
+        # a finir
+
+    return algo_result

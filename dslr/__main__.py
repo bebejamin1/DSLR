@@ -1,7 +1,7 @@
 
 import fire
 
-from dslr.logistique.regression import AlgoDG
+from dslr.logistique.regression import AlgoDG, predict
 from dslr.parsing.parser import parser
 from dslr.visual.describe import describe
 
@@ -28,7 +28,12 @@ class DSLR:
 # ========================== logreg_predict ===================================
 
     def logreg_predict(self) -> None:  # a faire avec le dataset_test
-        print("plus tard a faire apres le train")
+
+        results = predict(1)
+
+        for algo, prediction in results:
+            print(f"Pour l'algorithm {algo} la prediction est : {prediction}"
+                  + "\n")
 
 
 if __name__ == "__main__":
