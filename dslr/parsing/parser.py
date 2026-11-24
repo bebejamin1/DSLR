@@ -55,8 +55,12 @@ def load_dataset_pickle(input_path="data/dataset.pkl"):
         with open(input_path, "rb") as f:
             return pickle.load(f)
     except Exception as e:
-        print(f"Erreur lors de la lecture du pickle {input_path} : {e}", file=sys.stderr)
+        print(
+            f"Erreur lors de la lecture du pickle {input_path} : {e}",
+            file=sys.stderr
+        )
         return None
+
 
 # *****************************************************************************
 # *                       create_theta_file()                                 *
