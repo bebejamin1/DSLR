@@ -2,11 +2,12 @@
 import fire
 
 from dslr.parsing.parser import parser
+from dslr.visual.describe import describe
 
 class DSLR:
 
-    def describe(self) -> None:
-        pass
+    def describe(self, filepath) -> None:
+        describe(parser(filepath))
 
     def logreg_train(self, filepath = 'data/datasets/dataset_train.csv') -> None:  # a faire avec le dataset_train
         print("cc ma biche lucas")
