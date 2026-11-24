@@ -1,3 +1,8 @@
+# for ours project
+batch_gb.pkl
+mini_batch_gd.pkl
+stochastic_gd.pkl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

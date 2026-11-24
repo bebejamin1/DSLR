@@ -19,7 +19,7 @@ def _parse_value(val: str):
         return val
 
 
-def load_csv(filepath):
+def load_csv(filepath: str) -> list:
     try:
         with open(filepath, mode='r') as f:
             reader = csv.DictReader(f)
@@ -35,7 +35,8 @@ def load_csv(filepath):
         print(f"Erreur lors de la lecture du fichier : {e}", file=sys.stderr)
         sys.exit(1)
 
-def parser(filepath):
+
+def parser(filepath: str) -> list:
     try:
         return load_csv(filepath)
     except FileNotFoundError:
@@ -64,8 +65,10 @@ def load_dataset_pickle(input_path="data/dataset.pkl"):
         with open(input_path, "rb") as f:
             return pickle.load(f)
     except Exception as e:
-        print(f"Erreur lors de la lecture du pickle {input_path} : {e}", file=sys.stderr)
+        print(f"Erreur lors de la lecture du pickle {input_path} : {e}",
+              file=sys.stderr)
         return None
+
 
 # *****************************************************************************
 # *                       create_theta_file()                                 *

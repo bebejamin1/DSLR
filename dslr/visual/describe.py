@@ -1,5 +1,6 @@
-import sys
-import csv
+
+import sys  # noqa NOT USED
+import csv  # noqa NOT USED
 import json
 
 
@@ -13,6 +14,7 @@ def extract_numeric_features(data: list[dict]) -> dict[str, list[float]]:
                     features[col_name] = []
                 features[col_name].append(float(val))
     return features
+
 
 def describe(data: list) -> dict:
     """Calcule les statistiques descriptives pour les données fournies."""

@@ -48,6 +48,7 @@ class AlgoDG:
 
     def __init__(self, data: list):
         self.data = data
+        self.len = len(data)
 
 # ============================== TRAIN =======================================
 
@@ -55,7 +56,7 @@ class AlgoDG:
         os.system("clear")
 
         print("\n" + "TRAINING".center(79, " ") + "\n\n")
-        algo_names = ["batch_gd", "mini_batch_GD", "stochastic_gd"]
+        algo_names = ["batch_gd", "mini_batch_gd", "stochastic_gd"]
         colours = ["blue", "white", "red"]
 
         for algo, c in zip(algo_names, colours):
@@ -64,12 +65,12 @@ class AlgoDG:
             print(f"{algo}()")
             for _ in tqdm(range(10000), desc="Training Process", colour=c):
                 func = getattr(self, algo)
-                theta0, theta1, theta2, theta3 = func()
+                theta1, theta2, theta3, theta4 = func()
 
-                create_theta_file(theta0, theta1, theta2, theta3, algo)
+                create_theta_file(theta1, theta2, theta3, theta4, algo)
 
-            print(f"θserdaigle: {theta0:.4f} - θserpentard: {theta1:.4f} - "
-                  f"θgryffondor: {theta2:.4f} - θpoufsouffle: {theta3:.4f}")
+            print(f"θserdaigle: {theta1:.4f} - θserpentard: {theta2:.4f} - "
+                  f"θgryffondor: {theta3:.4f} - θpoufsouffle: {theta4:.4f}")
             print("\n\n")
 
         exit()
@@ -77,51 +78,23 @@ class AlgoDG:
 # ============================= BATCH GD ======================================
 
     def batch_gd(self) -> tuple:
+        t1, t2, t3, t4 = take_theta_file("batch_gd")
 
-        return (0.0, 0.0, 0.0, 0.0)
+        return (t1, t2, t3, t4)
 
 # ========================== MINI BATCH GD ====================================
 
     def mini_batch_GD(self) -> tuple:
-        return (0.0, 0.0, 0.0, 0.0)
+        t1, t2, t3, t4 = take_theta_file("mini_batch_GD")
+
+        return (t1, t2, t3, t4)
 
 # ========================== STOCHASTIC GD ====================================
 
     def stochastic_gd(self) -> tuple:
-        return (0.0, 0.0, 0.0, 0.0)
+        t1, t2, t3, t4 = take_theta_file("stochastic_gd")
 
-
-# *****************************************************************************
-# *                                  TEST                                     *
-# *                           a supprimer plus tard                           *
-
-def learningRate(data) -> tuple:  # a ne pas prendre en compte pour linstant
-    m = len(data)
-    somme0 = 0.0
-    somme1 = 0.0
-    theta0, theta1 = take_theta_file()
-
-    for row in data:
-        try:
-            km = row['km'] / 100000.0
-            price = row['price'] / 10000.0
-
-        except KeyError:
-            print("\n" + "Le data csv ne convient pas, veuillez le remplacer")
-            exit()
-
-        estimate = theta0 + theta1 * km
-        erreur = estimate - price
-        somme0 += erreur
-        somme1 += erreur * km
-
-    tmp0 = LEARNING_RATE * (1 / m) * somme0
-    tmp1 = LEARNING_RATE * (1 / m) * somme1
-
-    theta0 = theta0 - tmp0
-    theta1 = theta1 - tmp1
-
-    return (theta0, theta1)
+        return (t1, t2, t3, t4)
 
 
 # *****************************************************************************

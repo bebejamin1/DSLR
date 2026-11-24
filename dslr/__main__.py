@@ -7,16 +7,25 @@ from dslr.visual.describe import describe
 
 
 class DSLR:
+    def __init__(self):
+        self.trainpath = "data/datasets/dataset_train.csv"
+        self.testpath = "data/datasets/dataset_test.csv"
+
+# ============================= describe ======================================
 
     def describe(self, filepath) -> None:
         describe(parser(filepath))
 
-    def logreg_train(self, filepath = 'data/datasets/dataset_train.csv') -> None:  # a faire avec le dataset_train # noqa
+# =========================== logreg_train ====================================
 
-        data = parser(filepath)
+    def logreg_train(self) -> None:  # a faire avec le dataset_train # noqa
+
+        data = parser(self.trainpath)
 
         algo = AlgoDG(data)
         algo.train()
+
+# ========================== logreg_predict ===================================
 
     def logreg_predict(self) -> None:  # a faire avec le dataset_test
         print("plus tard a faire apres le train")
