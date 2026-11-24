@@ -32,8 +32,8 @@
 #    (ex: par paquets de 32)
 
 import os
-from tqdm import tqdm
 
+from tqdm import tqdm
 from dslr.parsing.parser import take_theta_file, create_theta_file
 
 
@@ -45,51 +45,49 @@ LEARNING_RATE = 0.01
 
 
 class AlgoDG:
+
     def __init__(self, data: list):
         self.data = data
 
 # ============================== TRAIN =======================================
 
-    def train(self) -> None:  # descente stochastique ?? a faire
-        # utilise des petit lot choisi aleatoirement a chaque iteration.
-        "Permet de lancer les different algo de regression"
+    def train(self) -> None:
         os.system("clear")
 
         print("\n" + "TRAINING".center(79, " ") + "\n\n")
         algo_names = ["batch_gd", "mini_batch_GD", "stochastic_gd"]
+        colours = ["blue", "white", "red"]
 
-        for algo in algo_names:
+        for algo, c in zip(algo_names, colours):
             create_theta_file(0.0, 0.0, 0.0, 0.0, algo)
 
-            for _ in tqdm(range(10000), desc="Training Process"):
-                # theta0, theta1, theta2, theta3 = globals().get(algo)
-                a = getattr(self, algo)
+            print(f"{algo}()")
+            for _ in tqdm(range(10000), desc="Training Process", colour=c):
+                func = getattr(self, algo)
+                theta0, theta1, theta2, theta3 = func()
 
-                theta0, theta1, theta2, theta3 = a()
-                # create_theta_file(theta0, theta1, theta2, theta3, algo)
+                create_theta_file(theta0, theta1, theta2, theta3, algo)
 
-        # print("\nEntraînement terminé! "
-        #       f"Theta0: {theta0:.4f}, Theta1: {theta1:.4f}")
+            print(f"θserdaigle: {theta0:.4f} - θserpentard: {theta1:.4f} - "
+                  f"θgryffondor: {theta2:.4f} - θpoufsouffle: {theta3:.4f}")
+            print("\n\n")
+
         exit()
 
 # ============================= BATCH GD ======================================
 
     def batch_gd(self) -> tuple:
-        print("oui")
 
         return (0.0, 0.0, 0.0, 0.0)
-        # theta0, theta1 = take_theta_file("batch_gd")
 
 # ========================== MINI BATCH GD ====================================
 
     def mini_batch_GD(self) -> tuple:
-        print("peu etre")
         return (0.0, 0.0, 0.0, 0.0)
 
 # ========================== STOCHASTIC GD ====================================
 
     def stochastic_gd(self) -> tuple:
-        print("non")
         return (0.0, 0.0, 0.0, 0.0)
 
 
