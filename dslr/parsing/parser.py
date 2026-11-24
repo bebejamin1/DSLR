@@ -19,7 +19,7 @@ def _parse_value(val: str):
         return val
 
 
-def load_csv(filepath):
+def parser(filepath):
     try:
         with open(filepath, mode='r') as f:
             reader = csv.DictReader(f)
@@ -34,15 +34,6 @@ def load_csv(filepath):
     except Exception as e:
         print(f"Erreur lors de la lecture du fichier : {e}", file=sys.stderr)
         sys.exit(1)
-
-def parser(filepath):
-    try:
-        return load_csv(filepath)
-    except FileNotFoundError:
-        print("Fichier introuvable !" + "\n"
-              "Veuillez mettre un fichier .csv avec un jeu de données dans"
-              "le dossier data")
-        exit(1)
 
 
 # *****************************************************************************
