@@ -4,8 +4,15 @@ import fire
 
 class DSLR:
 
-    def logreg_train(self) -> None:
+    def logreg_train(self) -> None:  # a faire avec le dataset_train
         print("cc ma biche lucas")
+
+        # ajouter tri et renvoyer liste ou dictionnaire
+
+        # pour que je puisse entrainer mon algo
+
+    def logreg_predict(self) -> None:  # a faire avec le dataset_test
+        print("plus tard a faire apres le train")
 
 
 if __name__ == "__main__":
