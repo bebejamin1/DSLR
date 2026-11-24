@@ -2,12 +2,16 @@
 import fire
 
 from dslr.logistique.regression import AlgoDG
-
+from dslr.parsing.parser import parser
 
 class DSLR:
 
-    def logreg_train(self) -> None:  # a faire avec le dataset_train
+    def describe(self) -> None:
+        pass
+
+    def logreg_train(self, filepath = 'data/datasets/dataset_train.csv') -> None:  # a faire avec le dataset_train
         print("cc ma biche lucas")
+        parser(filepath)
 
         # ajouter tri et renvoyer list
         data = []

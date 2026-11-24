@@ -1,6 +1,8 @@
+import json
 import csv
 import pickle
 import os
+import sys
 
 from pathlib import Path
 
@@ -9,70 +11,62 @@ from pathlib import Path
 # *                               parser()                                    *
 # *                                                                           *
 
-def parser(filepath: str) -> list:
-
+def _parse_value(val: str):
+    if val is None or val == "":
+        return None
     try:
-        dir = Path("data")
-        dir.mkdir(exist_ok=True)
-        dir = Path("img")
-        dir.mkdir(exist_ok=True)
+        return float(val)
+    except ValueError:
+        return val
 
-        data_list = []
-        check = []
 
-        if not (os.path.exists("data/theta.pkl")):
-            create_theta_file(0.0, 0.0)
+def load_csv(filepath):
+    try:
+        with open(filepath, mode='r') as f:
+            reader = csv.DictReader(f)
+            dataset = []
+            for row in reader:
+                cleaned_row = {}
+                for key, val in row.items():
+                    if key != "Index":
+                        cleaned_row[key] = _parse_value(val)
+                dataset.append(cleaned_row)
+            return dataset
+    except Exception as e:
+        print(f"Erreur lors de la lecture du fichier : {e}", file=sys.stderr)
+        sys.exit(1)
 
-        with open(filepath, 'r') as fcsv:
-            f = csv.DictReader(fcsv)
-
-            for row in f:
-                if (len(row) > 2 or len(row) < 2):
-                    continue
-
-                for k in row.keys():
-                    check.append(k)
-
-                if not (row.get("km") or row.get("price")):
-                    continue
-
-                km = row.get("km")
-                price = row.get("price")
-
-                try:
-                    km = int(km)
-                    price = int(price)
-
-                except ValueError:
-                    continue
-
-                if (km < 0 or price < 0):
-                    continue
-
-                data_list.append({"km": km, "price": price})
-
+def parser(filepath):
+    try:
+        return load_csv(filepath)
     except FileNotFoundError:
         print("Fichier introuvable !" + "\n"
               "Veuillez mettre un fichier .csv avec un jeu de données dans"
               "le dossier data")
-        exit()
+        exit(1)
 
-    except Exception:
-        print("\n" + "Le data.csv n'est pas conforme, les entêtes doivent être"
-              " km et price" + "\n")
-        exit()
 
-    if (len(data_list) < 2):
-        print("Le data.csv ne contient pas assez de données, minimum 2")
-        exit()
+# *****************************************************************************
+# *                        save / load dataset pickle                         *
+# *                                                                           *
 
-    if (check[0] != "km" or check[1] != "price"):
-        print("\n" + "Le header du data.csv nest pas conforme"
-              f" {check[0], check[1]} -> km, price" + "\n")
-        exit()
+def save_dataset_pickle(data, output_path="data/dataset.pkl") -> None:
+    path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "wb") as f:
+        pickle.dump(data, f)
 
-    return (data_list)
 
+def load_dataset_pickle(input_path="data/dataset.pkl"):
+    if not os.path.exists(input_path):
+        print(f"Fichier {input_path} introuvable.", file=sys.stderr)
+        return None
+    try:
+        with open(input_path, "rb") as f:
+            return pickle.load(f)
+    except Exception as e:
+        print(f"Erreur lors de la lecture du pickle {input_path} : {e}", file=sys.stderr)
+        return None
 
 # *****************************************************************************
 # *                       create_theta_file()                                 *
