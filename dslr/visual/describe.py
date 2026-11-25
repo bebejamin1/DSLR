@@ -1,7 +1,7 @@
 from dslr.maths.statistics import compute_statistics
 
 SUBJECT_WIDTH = 30
-STAT_VALUE_WIDTH = 11
+STAT_VALUE_WIDTH = 13
 SEPARATOR_WIDTH = 2
 BORDER_COLOUR = '\033[38;2;0;174;139m'
 RESET = '\033[0m'

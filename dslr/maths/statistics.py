@@ -1,16 +1,23 @@
 """Module fournissant les calculs statistiques et mathématiques pour DSLR."""
 
 
-def extract_subjects(students: list[dict]) -> dict[str, list[float]]:
-    """Regroupe les notes par matière."""
+def extract_subjects(students: list[dict]):
+    """Regroupe les notes par matière et par maison."""
     subjects_marks = {}
+    subjects_house_marks = {}
     for student in students:
+        house = student.get('Hogwarts House')
         for subject, mark in student.items():
             if isinstance(mark, (int, float)):
                 if subject not in subjects_marks:
                     subjects_marks[subject] = []
+                    subjects_house_marks[subject] = {}
                 subjects_marks[subject].append(float(mark))
-    return subjects_marks
+                if house:
+                    if house not in subjects_house_marks[subject]:
+                        subjects_house_marks[subject][house] = []
+                    subjects_house_marks[subject][house].append(float(mark))
+    return subjects_marks, subjects_house_marks
 
 
 def calculate_mean(marks: list[float]) -> float:
@@ -32,12 +39,15 @@ def calculate_std(marks: list[float], mean: float) -> float:
     variance = squared_differences / (count - 1)
     return variance ** 0.5
 
-
+import json
 def compute_statistics(students: list[dict]) -> dict[str, dict]:
     """Calcule les statistiques descriptives complètes pour chaque matière."""
-    subjects_marks = extract_subjects(students)
+    subjects_marks, subjects_houses = extract_subjects(students)
     subjects_statistics = {}
     for subject, marks in subjects_marks.items():
+        house_means = {}
+        for house, h_marks in subjects_houses.get(subject, {}).items():
+            house_means[house] = calculate_mean(h_marks)
         marks.sort()
         count = len(marks)
         mean = calculate_mean(marks)
@@ -49,6 +59,10 @@ def compute_statistics(students: list[dict]) -> dict[str, dict]:
             "25%": marks[int(count / 4)],
             "50%": marks[int(count / 2)],
             "75%": marks[int(count * 3 / 4)],
-            "max": marks[count - 1]
+            "max": marks[count - 1],
+            list(house_means.keys())[0]: house_means[list(house_means.keys())[0]],
+            list(house_means.keys())[1]: house_means[list(house_means.keys())[1]],
+            list(house_means.keys())[2]: house_means[list(house_means.keys())[2]],
+            list(house_means.keys())[3]: house_means[list(house_means.keys())[3]],
         }
     return subjects_statistics
