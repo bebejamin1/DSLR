@@ -5,6 +5,7 @@ from dslr.logistique.regression import AlgoDG, predict
 from dslr.parsing.parser import parser
 from dslr.visual.describe import describe
 from dslr.logistique.normaliser import normalise
+from dslr.visual.histogram import histogram
 
 
 
@@ -17,10 +18,15 @@ class DSLR:
         path = filepath if filepath is not None else self.trainpath
         normalise(parser(path))
 
-# ============================= describe ======================================
+# ============================== visual =======================================
 
     def describe(self) -> None:
         describe(parser(self.trainpath))
+
+
+    def histogram(self) -> None:
+        histogram(parser(self.trainpath))
+
 
 # =========================== logreg_train ====================================
 
