@@ -12,7 +12,7 @@ from pathlib import Path
 # *                                                                           *
 
 def _parse_value(val: str):
-    if val is None or val == "":
+    if val is None or val == "" or val.lower() == "nan":
         return None
     try:
         return float(val)
@@ -20,7 +20,7 @@ def _parse_value(val: str):
         return val
 
 
-def load_csv(filepath: str) -> list:
+def parser(filepath):
     try:
         with open(filepath, mode='r') as f:
             reader = csv.DictReader(f)
@@ -35,16 +35,6 @@ def load_csv(filepath: str) -> list:
     except Exception as e:
         print(f"Erreur lors de la lecture du fichier : {e}", file=sys.stderr)
         sys.exit(1)
-
-
-def parser(filepath: str) -> list:
-    try:
-        return load_csv(filepath)
-    except FileNotFoundError:
-        print("Fichier introuvable !" + "\n"
-              "Veuillez mettre un fichier .csv avec un jeu de données dans"
-              "le dossier data")
-        exit(1)
 
 
 # *****************************************************************************
@@ -66,8 +56,10 @@ def load_dataset_pickle(input_path="data/dataset.pkl"):
         with open(input_path, "rb") as f:
             return pickle.load(f)
     except Exception as e:
-        print(f"Erreur lors de la lecture du pickle {input_path} : {e}",
-              file=sys.stderr)
+        print(
+            f"Erreur lors de la lecture du pickle {input_path} : {e}",
+            file=sys.stderr
+        )
         return None
 
 
