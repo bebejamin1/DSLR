@@ -4,8 +4,9 @@ VALUE_WIDTH = 11
 SEPARATOR_WIDTH = 2
 BORDER_COLOUR = '\033[38;2;0;174;139m'
 RESET = '\033[0m'
-OPEN_PIPE = f"{BORDER_COLOUR}|{RESET} "
-CLOSE_PIPE = f" {BORDER_COLOUR}|{RESET}"
+PIPE = '|'
+OPEN_PIPE = f"{BORDER_COLOUR}{PIPE}{RESET} "
+CLOSE_PIPE = f" {BORDER_COLOUR}{PIPE}{RESET}"
 HORIZONTAL_LINE = f"{BORDER_COLOUR}-{RESET}"
 
 
@@ -43,22 +44,22 @@ def calculate_std(values: list[float], mean: float) -> float:
     return std
 
 
-def calculate_describe_values(data: list) -> dict:
+def calculate_describe_notes(data: list) -> dict:
     """Calcule les statistiques descriptives pour les données fournies."""
     numeric_features = extract_numeric_features(data)
     described = {}
-    for feat_name, values in numeric_features.items():
-        values.sort()
-        values_len = len(values)
+    for feat_name, notes in numeric_features.items():
+        notes.sort()
+        notes_len = len(notes)
         described[feat_name] = {
-            "count": values_len,
-            "mean": calculate_mean(values),
-            "std": calculate_std(values, calculate_mean(values)),
-            "min": values[0],
-            "25%": values[int(values_len / 4)],
-            "50%": values[int(values_len / 2)],
-            "75%": values[int(values_len * 3 / 4)],
-            "max": values[values_len - 1]
+            "count": notes_len,
+            "mean": calculate_mean(notes),
+            "std": calculate_std(notes, calculate_mean(notes)),
+            "min": notes[0],
+            "25%": notes[int(notes_len / 4)],
+            "50%": notes[int(notes_len / 2)],
+            "75%": notes[int(notes_len * 3 / 4)],
+            "max": notes[notes_len - 1]
         }
     return described
 
@@ -73,7 +74,7 @@ def print_aligned(value, width: int) -> None:
 
 def describe(data: list) -> None:
     """Calcule les statistiques descriptives pour les données fournies."""
-    described = calculate_describe_values(data)
+    described = calculate_describe_notes(data)
     first_feature_stats = next(iter(described.values()))
     num_stats = len(first_feature_stats)
     line_len = FEATURE_NAME_WIDTH + (VALUE_WIDTH + SEPARATOR_WIDTH) * num_stats

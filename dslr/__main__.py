@@ -3,8 +3,13 @@ import fire
 
 from dslr.parsing.parser import parser
 from dslr.visual.describe import describe
+from dslr.logistique.normaliser import normalise
+
 
 class DSLR:
+    def normalise(self, filepath="data/datasets/dataset_train.csv"):
+        normalise(parser(filepath))
+
 
     def describe(self, filepath) -> None:
         describe(parser(filepath))
