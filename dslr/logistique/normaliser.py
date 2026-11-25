@@ -1,31 +1,38 @@
-
-from dslr.visual.describe import calculate_describe_notes
-
-
-def replace_empty_notes_with_means(data: list, subjects_infos: dict) -> list:
-    for student in data:
-        for subject, note in student.items():
-            if (note is None or note == "") and subject in subjects_infos:
-                student[subject] = subjects_infos[subject]['mean']
-    return data
+from dslr.maths.statistics import compute_statistics
 
 
-def standardise(data: list, subjects_infos: dict) -> list:
-    for student in data:
-        for subject, note in student.items():
-            if subject in subjects_infos:
-                mean = subjects_infos[subject]['mean']
-                std = subjects_infos[subject]['std']
+def replace_empty_marks_with_means(
+    students: list[dict],
+    subjects_statistics: dict[str, dict]
+) -> list[dict]:
+    """Remplace les notes manquantes d'un élève par la moyenne de la matière."""
+    for student in students:
+        for subject, mark in student.items():
+            if (mark is None or mark == "") and subject in subjects_statistics:
+                student[subject] = subjects_statistics[subject]['mean']
+    return students
+
+
+def standardise_marks(
+    students: list[dict],
+    subjects_statistics: dict[str, dict]
+) -> list[dict]:
+    """Standardise chaque note selon la formule Z-score: (note - mean) / std."""
+    for student in students:
+        for subject, mark in student.items():
+            if subject in subjects_statistics:
+                mean = subjects_statistics[subject]['mean']
+                std = subjects_statistics[subject]['std']
                 if std != 0:
-                    student[subject] = (student[subject] - mean) / std 
-                else: 
+                    student[subject] = (student[subject] - mean) / std
+                else:
                     student[subject] = 0.0
-    return data
+    return students
 
 
-def normalise(data: list) -> list:
-    subjects_infos = calculate_describe_notes(data)
-    data = replace_empty_notes_with_means(data, subjects_infos)
-    data = standardise(data, subjects_infos)
-    print(data)
-    return data
+def normalise(students: list[dict]) -> list[dict]:
+    """Nettoie (imputation) et standardise les notes de tous les élèves."""
+    subjects_statistics = compute_statistics(students)
+    students = replace_empty_marks_with_means(students, subjects_statistics)
+    students = standardise_marks(students, subjects_statistics)
+    return students
