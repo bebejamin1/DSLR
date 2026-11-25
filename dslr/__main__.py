@@ -13,8 +13,8 @@ class DSLR:
 
 # ============================= describe ======================================
 
-    def describe(self, filepath) -> None:
-        describe(parser(filepath))
+    def describe(self) -> None:
+        describe(parser(self.trainpath))
 
 # =========================== logreg_train ====================================
 

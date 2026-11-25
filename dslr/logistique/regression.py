@@ -34,6 +34,7 @@ import os
 
 from tqdm import tqdm
 from dslr.parsing.parser import take_theta_file, create_theta_file
+from dslr.logistique.maths import sigmoid
 
 
 # *****************************************************************************
@@ -59,17 +60,23 @@ class AlgoDG:
         colours = ["blue", "white", "red"]
 
         for algo, c in zip(algo_names, colours):
-            create_theta_file(0.0, 0.0, 0.0, 0.0, algo)
 
-            print(f"{algo}()")
-            for _ in tqdm(range(10000), desc="Training Process", colour=c):
-                func = getattr(self, algo)
-                theta1, theta2, theta3, theta4 = func()
+            # old_t1, old_t2, old_t3, old_t4 = 0.0
+            # create_theta_file(0.0, 0.0, 0.0, 0.0, algo)
+            # for _ in tqdm(range(10000), desc=f"{algo}()", colour=c):
+            i = 0
+            pbar = tqdm(desc=f"{algo}()", colour=c)
+            while (i < 200000000):
+                i += 1
+                pbar.update(100)
+                # func = getattr(self, algo)
+                # theta1, theta2, theta3, theta4 = func()
 
-                create_theta_file(theta1, theta2, theta3, theta4, algo)
+                # create_theta_file(theta1, theta2, theta3, theta4, algo)
+            pbar.close
 
-            print(f"θserdaigle: {theta1:.4f} - θserpentard: {theta2:.4f} - "
-                  f"θgryffondor: {theta3:.4f} - θpoufsouffle: {theta4:.4f}")
+            # print(f"θserdaigle: {theta1:.4f} - θserpentard: {theta2:.4f} - "
+            #       f"θgryffondor: {theta3:.4f} - θpoufsouffle: {theta4:.4f}")
             print("\n\n")
 
         exit()
@@ -77,6 +84,7 @@ class AlgoDG:
 # ============================= BATCH GD ======================================
 
     def batch_gd(self) -> tuple:
+
         t1, t2, t3, t4 = take_theta_file("batch_gd")
 
         return (t1, t2, t3, t4)
