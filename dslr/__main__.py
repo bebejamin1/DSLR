@@ -1,29 +1,53 @@
 
 import fire
 
+from dslr.logistique.regression import AlgoDG, predict
 from dslr.parsing.parser import parser
 from dslr.visual.describe import describe
 from dslr.logistique.normaliser import normalise
 
 
+
 class DSLR:
-    def normalise(self, filepath="data/datasets/dataset_train.csv"):
-        normalise(parser(filepath))
+    def __init__(self, trainpath: str = "data/datasets/dataset_train.csv", testpath: str = "data/datasets/dataset_test.csv"):
+        self.trainpath = trainpath
+        self.testpath = testpath
 
+    def normalise(self, filepath: str = None):
+        path = filepath if filepath is not None else self.trainpath
+        normalise(parser(path))
 
-    def describe(self, filepath) -> None:
-        describe(parser(filepath))
+# ============================= describe ======================================
 
-    def logreg_train(self, filepath = 'data/datasets/dataset_train.csv') -> None:  # a faire avec le dataset_train
-        print("cc ma biche lucas")
-        parser(filepath)
+    def describe(self) -> None:
+        describe(parser(self.trainpath))
 
-        # ajouter tri et renvoyer liste ou dictionnaire
+# =========================== logreg_train ====================================
 
-        # pour que je puisse entrainer mon algo
+    def logreg_train(self) -> None:  # a faire avec le dataset_train # noqa
+
+        data = parser(self.trainpath)
+
+        algo = AlgoDG(data)
+        algo.train()
+
+# ========================== logreg_predict ===================================
 
     def logreg_predict(self) -> None:  # a faire avec le dataset_test
-        print("plus tard a faire apres le train")
+        from dslr.logistique.regression import predict_data
+        from dslr.parsing.parser import parser
+        import csv
+        
+        test_data = parser(self.testpath)
+        predictions = predict_data(test_data, "batch_gd")
+        
+        with open("houses.csv", "w", newline="\n") as f:
+            writer = csv.writer(f, lineterminator="\n")
+            writer.writerow(["Index", "Hogwarts House"])
+            for idx, prediction in enumerate(predictions):
+                writer.writerow([idx, prediction])
+        
+        print("Fichier houses.csv généré avec succès!")
 
 
 if __name__ == "__main__":
