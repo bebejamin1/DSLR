@@ -39,7 +39,7 @@ def calculate_std(marks: list[float], mean: float) -> float:
     variance = squared_differences / (count - 1)
     return variance ** 0.5
 
-import json
+
 def compute_statistics(students: list[dict]) -> dict[str, dict]:
     """Calcule les statistiques descriptives complètes pour chaque matière."""
     subjects_marks, subjects_houses = extract_subjects(students)

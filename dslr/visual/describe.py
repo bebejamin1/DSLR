@@ -27,6 +27,11 @@ def describe(students: list[dict]) -> None:
     border = OPEN_PIPE + HORIZONTAL_LINE * line_length + CLOSE_PIPE
 
     print(border)
+    print(OPEN_PIPE, end="")
+    print_aligned(" ",  (len(subjects_statistics) + 1 - 4) * (STAT_VALUE_WIDTH + SEPARATOR_WIDTH))
+    print_aligned("means",  (len(subjects_statistics) - 9) * (STAT_VALUE_WIDTH + SEPARATOR_WIDTH) - SEPARATOR_WIDTH)
+
+    print('\n' + border)
 
     print(OPEN_PIPE, end="")
     print_aligned("", SUBJECT_WIDTH)
