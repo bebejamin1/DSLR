@@ -67,8 +67,8 @@ def load_dataset_pickle(input_path="data/dataset.pkl"):
 # *                       create_theta_file()                                 *
 # *                                                                           *
 
-def create_theta_file(θserdaigle: float, θserpentard: float,
-                      θgryffondor: float, θpoufsouffle: float,
+def create_theta_file(θserdaigle: list, θserpentard: list,
+                      θgryffondor: list, θpoufsouffle: list,
                       name: str) -> None:
 
     dir = Path("data")
