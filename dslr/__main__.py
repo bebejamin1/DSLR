@@ -28,12 +28,20 @@ class DSLR:
 # ========================== logreg_predict ===================================
 
     def logreg_predict(self) -> None:  # a faire avec le dataset_test
-
-        results = predict(1)
-
-        for algo, prediction in results:
-            print(f"Pour l'algorithm {algo} la prediction est : {prediction}"
-                  + "\n")
+        from dslr.logistique.regression import predict_data
+        from dslr.parsing.parser import parser
+        import csv
+        
+        test_data = parser(self.testpath)
+        predictions = predict_data(test_data, "batch_gd")
+        
+        with open("houses.csv", "w", newline="\n") as f:
+            writer = csv.writer(f, lineterminator="\n")
+            writer.writerow(["Index", "Hogwarts House"])
+            for idx, prediction in enumerate(predictions):
+                writer.writerow([idx, prediction])
+        
+        print("Fichier houses.csv généré avec succès!")
 
 
 if __name__ == "__main__":
