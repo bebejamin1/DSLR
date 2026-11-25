@@ -1,3 +1,4 @@
+
 import csv
 import pickle
 import os
@@ -66,14 +67,17 @@ def load_dataset_pickle(input_path="data/dataset.pkl"):
 # *                       create_theta_file()                                 *
 # *                                                                           *
 
-def create_theta_file(theta0: float, theta1: float) -> None:
+def create_theta_file(θserdaigle: list, θserpentard: list,
+                      θgryffondor: list, θpoufsouffle: list,
+                      name: str) -> None:
 
     dir = Path("data")
     dir.mkdir(exist_ok=True)
 
-    content = {"theta0": theta0, "theta1": theta1}
+    content = {"θserdaigle": θserdaigle, "θserpentard": θserpentard,
+               "θgryffondor": θgryffondor, "θpoufsouffle": θpoufsouffle}
 
-    with open("data/theta.pkl", "wb") as f:
+    with open(f"data/{name}.pkl", "wb") as f:
         pickle.dump(content, f)
 
 
@@ -81,18 +85,19 @@ def create_theta_file(theta0: float, theta1: float) -> None:
 # *                        take_theta_file()                                  *
 # *                                                                           *
 
-def take_theta_file() -> tuple:
-    if not (os.path.exists("data/theta.pkl")):
-        print("\n" + "Lancez un learningRate avant tout !" + "\n"
+def take_theta_file(name: str) -> tuple:
+    if not (os.path.exists(f"data/{name}.pkl")):
+        print("\n" + "Lancez un logreg_train avant tout !" + "\n"
               "Aucun fichier theta trouvé")
         exit()
 
     try:
-        with open("data/theta.pkl", 'rb') as f:
+        with open(f"data/{name}.pkl", 'rb') as f:
             c = pickle.load(f)
 
     except Exception:
-        print("Le fichier est corrompu, relancer un learningRate")
+        print("Le fichier est corrompu, relancer un logreg_train")
         exit()
 
-    return (c["theta0"], c["theta1"])
+    return (c["θserdaigle"], c["θserpentard"],
+            c["θgryffondor"], c["θpoufsouffle"])

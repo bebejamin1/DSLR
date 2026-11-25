@@ -28,7 +28,8 @@ def calculate_mean(marks: list[float]) -> float:
 
 
 def calculate_std(marks: list[float], mean: float) -> float:
-    """Calcule l'écart-type d'échantillon des notes par rapport à la moyenne."""
+    """Calcule l'écart-type d'échantillon des notes par rapport à la
+    moyenne."""
     count = len(marks)
     if count <= 1:
         return 0.0
@@ -51,7 +52,7 @@ def compute_statistics(students: list[dict]) -> dict[str, dict]:
         marks.sort()
         count = len(marks)
         mean = calculate_mean(marks)
-        subjects_statistics[subject] = {
+        stats = {
             "count": count,
             "mean": mean,
             "std": calculate_std(marks, mean),
@@ -60,9 +61,8 @@ def compute_statistics(students: list[dict]) -> dict[str, dict]:
             "50%": marks[int(count / 2)],
             "75%": marks[int(count * 3 / 4)],
             "max": marks[count - 1],
-            list(house_means.keys())[0]: house_means[list(house_means.keys())[0]],
-            list(house_means.keys())[1]: house_means[list(house_means.keys())[1]],
-            list(house_means.keys())[2]: house_means[list(house_means.keys())[2]],
-            list(house_means.keys())[3]: house_means[list(house_means.keys())[3]],
         }
+        for house in house_means:
+            stats[house] = house_means[house]
+        subjects_statistics[subject] = stats
     return subjects_statistics
