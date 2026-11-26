@@ -7,6 +7,7 @@ from dslr.visual.describe import describe
 from dslr.logistique.normaliser import normalise
 from dslr.visual.histogram import histogram
 from dslr.visual.scatter_plot import scatter_plot
+from dslr.visual.pair_plot import pair_plot
 
 
 
@@ -31,6 +32,10 @@ class DSLR:
 
     def scatter_plot(self) -> None:
         scatter_plot(parser(self.trainpath))
+
+
+    def pair_plot(self) -> None:
+        pair_plot(parser(self.trainpath))
 
 
 # =========================== logreg_train ====================================

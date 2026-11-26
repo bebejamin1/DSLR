@@ -50,3 +50,24 @@ def setup_figure_layout(
         y=0.99,
     )
     plt.tight_layout(rect=[0, 0, 1, 0.94])
+
+
+def _extract_pair_data(
+    students: list[dict],
+    feat_x: str,
+    feat_y: str
+) -> dict[str, tuple[list[float], list[float]]]:
+    """Extrait les coordonnées (x, y) pour chaque maison pour deux matières."""
+    house_points = {house: ([], []) for house in ["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"]}
+    for student in students:
+        house = student.get("Hogwarts House")
+        val_x = student.get(feat_x)
+        val_y = student.get(feat_y)
+        if (
+            house in house_points
+            and isinstance(val_x, (int, float))
+            and isinstance(val_y, (int, float))
+        ):
+            house_points[house][0].append(float(val_x))
+            house_points[house][1].append(float(val_y))
+    return house_points
