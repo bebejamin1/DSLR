@@ -1,4 +1,3 @@
-"""Fonctions utilitaires et constantes partagées pour les visualisations DSLR."""
 
 import matplotlib.pyplot as plt
 
@@ -19,7 +18,8 @@ def add_legend(
     fontsize: int = 9,
     title_fontsize: int = 10,
 ) -> None:
-    """Ajoute une légende globale commune aux figures basée sur le premier sous-graphe."""
+    """Ajoute une légende globale commune aux figures basée sur le premier
+    sous-graphe."""
     handles, labels = ax.get_legend_handles_labels()
     fig.legend(
         handles,
@@ -39,7 +39,8 @@ def setup_figure_layout(
     title: str,
     legend_loc: str = "upper right",
 ) -> None:
-    """Supprime les axes inutilisés, ajoute la légende commune, le titre et ajuste les marges."""
+    """Supprime les axes inutilisés, ajoute la légende commune, le titre et
+    ajuste les marges."""
     for i in range(num_plots, len(axes)):
         fig.delaxes(axes[i])
     add_legend(fig, axes[0], loc=legend_loc)
@@ -58,7 +59,7 @@ def _extract_pair_data(
     feat_y: str
 ) -> dict[str, tuple[list[float], list[float]]]:
     """Extrait les coordonnées (x, y) pour chaque maison pour deux matières."""
-    house_points = {house: ([], []) for house in ["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"]}
+    house_points = {house: ([], []) for house in HOUSES}
     for student in students:
         house = student.get("Hogwarts House")
         val_x = student.get(feat_x)

@@ -1,3 +1,4 @@
+
 from dslr.maths.statistics import compute_statistics
 
 SUBJECT_WIDTH = 30

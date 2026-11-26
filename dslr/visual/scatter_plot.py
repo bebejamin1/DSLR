@@ -1,8 +1,15 @@
+
 import itertools
 import math
 import matplotlib.pyplot as plt
+
 from dslr.maths.statistics import extract_subjects
-from dslr.visual.utils import setup_figure_layout, _extract_pair_data, HOUSES, HOUSE_COLORS
+from dslr.visual.utils import (
+    setup_figure_layout,
+    _extract_pair_data,
+    HOUSES,
+    HOUSE_COLORS
+)
 
 
 def plot_scatter_points(
@@ -26,7 +33,8 @@ def plot_scatter_points(
 
 
 def scatter_plot(students: list[dict]) -> None:
-    """Affiche une grille de nuages de points pour toutes les paires de matières."""
+    """Affiche une grille de nuages de points pour toutes les paires de
+    matières."""
     subjects_marks, _ = extract_subjects(students)
     subjects = list(subjects_marks.keys())
     pairs = list(itertools.combinations(subjects, 2))

@@ -1,7 +1,32 @@
-import math
+
 import matplotlib.pyplot as plt
-from dslr.maths.statistics import extract_subjects
-from dslr.visual.utils import HOUSES, HOUSE_COLORS, setup_figure_layout
+
+from dslr.maths.statistics import (
+    compute_house_statistics,
+    compute_subject_homogeneity_score,
+    extract_subjects,
+)
+from dslr.visual.utils import HOUSES, HOUSE_COLORS, add_legend
+
+
+def find_most_homogeneous_subject(
+    subjects_marks: dict, subjects_houses: dict
+) -> tuple[str, float]:
+    """Trouve la matière dont la répartition des notes est la plus homogène
+    entre les 4 maisons."""
+    best_subject = None
+    min_score = float("inf")
+    for subject, marks in subjects_marks.items():
+        house_means, house_stds = compute_house_statistics(
+            subjects_houses, subject
+        )
+        score = compute_subject_homogeneity_score(
+            marks, house_means, house_stds
+        )
+        if score < min_score:
+            min_score = score
+            best_subject = subject
+    return best_subject, min_score
 
 
 def _plot_subject_histogram(
@@ -26,23 +51,21 @@ def _plot_subject_histogram(
 
 
 def histogram(data: dict) -> None:
-    """Affiche une grille d'histogrammes uniforme pour chaque matière."""
+    """Identifie et affiche l'histogramme du cours ayant une répartition
+    homogène."""
     subjects_marks, subjects_houses = extract_subjects(data)
-    subjects = list(subjects_marks.keys())
-    num_subjects = len(subjects)
-    if num_subjects == 0:
-        return
-    cols = 4
-    rows = math.ceil(num_subjects / cols)
-    fig, axes = plt.subplots(rows, cols, figsize=(16, 10))
-    axes = axes.flatten()
-    for i in range(num_subjects):
-        _plot_subject_histogram(axes[i], subjects[i], subjects_houses)
-    setup_figure_layout(
-        fig,
-        axes,
-        num_subjects,
-        title="Distribution of marks by subject, by house",
-        legend_loc="lower right",
+    best_subject, _ = find_most_homogeneous_subject(
+        subjects_marks, subjects_houses
     )
+    fig, ax = plt.subplots(figsize=(10, 6))
+    _plot_subject_histogram(ax, best_subject, subjects_houses)
+    ax.set_title(
+        f"Homogeneous Distribution: {best_subject}",
+        fontsize=12,
+        fontweight="bold",
+    )
+    ax.set_xlabel("Marks", fontsize=10)
+    ax.set_ylabel("Number of Students", fontsize=10)
+    add_legend(fig, ax, loc="lower right")
+    plt.tight_layout()
     plt.show()
