@@ -21,7 +21,8 @@
 # 4 theta different
 
 # Comment le modèle apprend ? (Coût et Descente de Gradient)
-# utilise la Log Loss J(theta) = -1/m * sum[y_i * log(h_i) + (1-y_i) * log(1-h_i)]
+# utilise la Log Loss
+# J(theta) = -1/m * sum[y_i * log(h_i) + (1-y_i) * log(1-h_i)]
 
 # 3 algo
 # 1. Batch GD (Obligatoire) Regarde tous les élèves avant de faire un pas.
@@ -32,8 +33,8 @@ import os
 
 from tqdm import tqdm
 from dslr.parsing.parser import take_theta_file, create_theta_file
-from dslr.logistique.maths import (
-    sigmoid, dot_product, add_bias, 
+from dslr.logistique.maths import (  # noqa
+    sigmoid, dot_product, add_bias,
     vectorized_sigmoid, log_loss, compute_gradient
 )
 from dslr.logistique.normaliser import normalise
@@ -62,29 +63,30 @@ class AlgoDG:
         self._prepare_data()
 
     def _prepare_data(self):
-        """Prépare les données: extrait features et labels, normalise, ajoute bias."""
+        """Prépare les données: extrait features et labels,
+        normalise, ajoute bias."""
         if not self.data:
             raise ValueError("Data is empty")
-        
+
         normalised_data = normalise(self.data)
-        
+
         if not normalised_data:
             raise ValueError("Normalized data is empty")
-        
-        feature_keys = [k for k in normalised_data[0].keys() 
-                       if k not in ['Index', 'Hogwarts House', 'First Name', 
-                                   'Last Name', 'Birthday', 'Best Hand']]
-        
+
+        feature_keys = [k for k in normalised_data[0].keys()
+                        if k not in ['Index', 'Hogwarts House', 'First Name',
+                                     'Last Name', 'Birthday', 'Best Hand']]
+
         X = []
         y = []
-        
+
         for student in normalised_data:
             row = {}
             for key in feature_keys:
                 row[key] = student.get(key, 0.0)
             X.append(row)
             y.append(student.get('Hogwarts House', ''))
-        
+
         self.X = add_bias(X)
         self.y = y
         self.n_features = len(self.X[0]) if self.X else 0
@@ -112,16 +114,17 @@ class AlgoDG:
             theta_serpentard = self._initialize_theta(self.n_features)
             theta_gryffondor = self._initialize_theta(self.n_features)
             theta_poufsouffle = self._initialize_theta(self.n_features)
-            
+
             create_theta_file(theta_serdaigle, theta_serpentard,
-                             theta_gryffondor, theta_poufsouffle, algo)
+                              theta_gryffondor, theta_poufsouffle, algo)
 
             for _ in tqdm(range(N_ITERATIONS), desc=f"{algo}()", colour=c):
                 func = getattr(self, algo)
-                theta_serdaigle, theta_serpentard, theta_gryffondor, theta_poufsouffle = func()
+                (theta_serdaigle, theta_serpentard,
+                 theta_gryffondor, theta_poufsouffle) = func()
 
                 create_theta_file(theta_serdaigle, theta_serpentard,
-                                 theta_gryffondor, theta_poufsouffle, algo)
+                                  theta_gryffondor, theta_poufsouffle, algo)
 
             print(f"θserdaigle: {theta_serdaigle[:5]}... - "
                   f"θserpentard: {theta_serpentard[:5]}...")
@@ -138,9 +141,9 @@ class AlgoDG:
         Descente de gradient par lots (Batch Gradient Descent).
         Charge les theta depuis le fichier, met à jour avec tout le dataset.
         """
-        theta_serdaigle, theta_serpentard, theta_gryffondor, theta_poufsouffle = \
-            take_theta_file("batch_gd")
-        
+        (theta_serdaigle, theta_serpentard,
+         theta_gryffondor, theta_poufsouffle) = take_theta_file("batch_gd")
+
         y_serdaigle = self._create_binary_labels("Ravenclaw")
         y_serpentard = self._create_binary_labels("Slytherin")
         y_gryffondor = self._create_binary_labels("Gryffindor")
@@ -154,28 +157,40 @@ class AlgoDG:
         grad_serdaigle = compute_gradient(self.X, y_serdaigle, h_serdaigle)
         grad_serpentard = compute_gradient(self.X, y_serpentard, h_serpentard)
         grad_gryffondor = compute_gradient(self.X, y_gryffondor, h_gryffondor)
-        grad_poufsouffle = compute_gradient(self.X, y_poufsouffle, h_poufsouffle)
+        grad_poufsouffle = compute_gradient(self.X, y_poufsouffle,
+                                            h_poufsouffle)
 
-        theta_serdaigle = [theta_serdaigle[i] - LEARNING_RATE * grad_serdaigle[i] for i in range(len(theta_serdaigle))]
-        theta_serpentard = [theta_serpentard[i] - LEARNING_RATE * grad_serpentard[i] for i in range(len(theta_serpentard))]
-        theta_gryffondor = [theta_gryffondor[i] - LEARNING_RATE * grad_gryffondor[i] for i in range(len(theta_gryffondor))]
-        theta_poufsouffle = [theta_poufsouffle[i] - LEARNING_RATE * grad_poufsouffle[i] for i in range(len(theta_poufsouffle))]
+        theta_serdaigle = [theta_serdaigle[i] - LEARNING_RATE *
+                           grad_serdaigle[i]
+                           for i in range(len(theta_serdaigle))]
+        theta_serpentard = [theta_serpentard[i] - LEARNING_RATE *
+                            grad_serpentard[i]
+                            for i in range(len(theta_serpentard))]
+        theta_gryffondor = [theta_gryffondor[i] - LEARNING_RATE *
+                            grad_gryffondor[i]
+                            for i in range(len(theta_gryffondor))]
+        theta_poufsouffle = [theta_poufsouffle[i] - LEARNING_RATE *
+                             grad_poufsouffle[i]
+                             for i in range(len(theta_poufsouffle))]
 
-        return (theta_serdaigle, theta_serpentard, theta_gryffondor, theta_poufsouffle)
+        return (theta_serdaigle, theta_serpentard,
+                theta_gryffondor, theta_poufsouffle)
 
 # ========================== MINI BATCH GD ====================================
 
     def mini_batch_gd(self) -> tuple:
-        theta_serdaigle, theta_serpentard, theta_gryffondor, theta_poufsouffle = \
-            take_theta_file("mini_batch_gd")
-        return (theta_serdaigle, theta_serpentard, theta_gryffondor, theta_poufsouffle)
+        (theta_serdaigle, theta_serpentard, theta_gryffondor,
+         theta_poufsouffle) = take_theta_file("mini_batch_gd")
+        return (theta_serdaigle, theta_serpentard, theta_gryffondor,
+                theta_poufsouffle)
 
 # ========================== STOCHASTIC GD ====================================
 
     def stochastic_gd(self) -> tuple:
-        theta_serdaigle, theta_serpentard, theta_gryffondor, theta_poufsouffle = \
-            take_theta_file("stochastic_gd")
-        return (theta_serdaigle, theta_serpentard, theta_gryffondor, theta_poufsouffle)
+        (theta_serdaigle, theta_serpentard, theta_gryffondor,
+         theta_poufsouffle) = take_theta_file("stochastic_gd")
+        return (theta_serdaigle, theta_serpentard,
+                theta_gryffondor, theta_poufsouffle)
 
 
 # *****************************************************************************
@@ -186,48 +201,49 @@ class AlgoDG:
 def predict_data(data: list, algo: str = "batch_gd") -> list:
     """
     Prédit les maisons pour un ensemble d'étudiants.
-    
+
     Args:
         data: Liste de dictionnaires représentant les étudiants
         algo: Algorithme à utiliser (batch_gd, mini_batch_gd, stochastic_gd)
-        
+
     Returns:
         Liste des maisons prédites
     """
-    theta_serdaigle, theta_serpentard, theta_gryffondor, theta_poufsouffle = take_theta_file(algo)
-    
+    (theta_serdaigle, theta_serpentard,
+     theta_gryffondor, theta_poufsouffle) = take_theta_file(algo)
+
     normalised_data = normalise(data)
-    
-    feature_keys = [k for k in normalised_data[0].keys() 
-                   if k not in ['Index', 'Hogwarts House', 'First Name', 
-                                'Last Name', 'Birthday', 'Best Hand']]
-    
+
+    feature_keys = [k for k in normalised_data[0].keys()
+                    if k not in ['Index', 'Hogwarts House', 'First Name',
+                                 'Last Name', 'Birthday', 'Best Hand']]
+
     X = []
     for student in normalised_data:
         row = {}
         for key in feature_keys:
             row[key] = student.get(key, 0.0)
         X.append(row)
-    
+
     X_with_bias = add_bias(X)
-    
+
     predictions = []
     for x in X_with_bias:
         prob_serdaigle = sigmoid(dot_product(x, theta_serdaigle))
         prob_serpentard = sigmoid(dot_product(x, theta_serpentard))
         prob_gryffondor = sigmoid(dot_product(x, theta_gryffondor))
         prob_poufsouffle = sigmoid(dot_product(x, theta_poufsouffle))
-        
+
         probs = {
             "Ravenclaw": prob_serdaigle,
             "Slytherin": prob_serpentard,
             "Gryffindor": prob_gryffondor,
             "Hufflepuff": prob_poufsouffle
         }
-        
+
         predicted_house = max(probs.items(), key=lambda x: x[1])[0]
         predictions.append(predicted_house)
-    
+
     return predictions
 
 

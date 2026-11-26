@@ -2,6 +2,7 @@
 batch_gd.pkl
 mini_batch_gd.pkl
 stochastic_gd.pkl
+houses.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,7 +1,7 @@
 
 import fire
 
-from dslr.logistique.regression import AlgoDG, predict
+from dslr.logistique.regression import AlgoDG, predict  # noqa
 from dslr.parsing.parser import parser
 from dslr.visual.describe import describe
 
@@ -31,16 +31,16 @@ class DSLR:
         from dslr.logistique.regression import predict_data
         from dslr.parsing.parser import parser
         import csv
-        
-        test_data = parser(self.testpath)
+
+        test_data = parser(self.trainpath)
         predictions = predict_data(test_data, "batch_gd")
-        
+
         with open("houses.csv", "w", newline="\n") as f:
             writer = csv.writer(f, lineterminator="\n")
             writer.writerow(["Index", "Hogwarts House"])
             for idx, prediction in enumerate(predictions):
                 writer.writerow([idx, prediction])
-        
+
         print("Fichier houses.csv généré avec succès!")
 
 
