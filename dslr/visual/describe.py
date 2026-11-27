@@ -1,3 +1,4 @@
+
 from dslr.maths.statistics import compute_statistics
 
 SUBJECT_WIDTH = 30
@@ -12,16 +13,16 @@ HORIZONTAL_LINE = f"{BORDER_COLOUR}-{RESET}"
 
 
 def print_aligned(value, width: int) -> None:
-    """Affiche une valeur précédée d'espaces pour atteindre une largeur
-    totale fixe."""
+    """Affiche une valeur précédée d'espaces pour atteindre une largeur totale
+    fixe."""
     val_str = str(value)
     spaces = max(0, width - len(val_str))
     print(" " * spaces + val_str, end=CLOSE_PIPE)
 
 
 def describe(students: list[dict]) -> None:
-    """Affiche les statistiques des matières de Poudlard sous forme de tableau.
-    """
+    """Affiche les statistiques des matières de Poudlard sous forme de
+    tableau."""
     subjects_statistics = compute_statistics(students)
     first_subject_stats = next(iter(subjects_statistics.values()))
     num_stats = len(first_subject_stats)

@@ -4,17 +4,39 @@ import fire
 from dslr.logistique.regression import AlgoDG, predict  # noqa
 from dslr.parsing.parser import parser
 from dslr.visual.describe import describe
+from dslr.logistique.normaliser import normalise
+from dslr.visual.histogram import histogram
+from dslr.visual.scatter_plot import scatter_plot
+from dslr.visual.pair_plot import pair_plot
+
 
 
 class DSLR:
-    def __init__(self):
-        self.trainpath = "data/datasets/dataset_train.csv"
-        self.testpath = "data/datasets/dataset_test.csv"
+    def __init__(self, trainpath: str = "data/datasets/dataset_train.csv", testpath: str = "data/datasets/dataset_test.csv"):
+        self.trainpath = trainpath
+        self.testpath = testpath
 
-# ============================= describe ======================================
+    def normalise(self, filepath: str = None):
+        path = filepath if filepath is not None else self.trainpath
+        normalise(parser(path))
+
+# ============================== visual =======================================
 
     def describe(self) -> None:
         describe(parser(self.trainpath))
+
+
+    def histogram(self) -> None:
+        histogram(parser(self.trainpath))
+
+
+    def scatter_plot(self) -> None:
+        scatter_plot(parser(self.trainpath))
+
+
+    def pair_plot(self) -> None:
+        pair_plot(parser(self.trainpath))
+
 
 # =========================== logreg_train ====================================
 

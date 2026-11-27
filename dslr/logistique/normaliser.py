@@ -1,3 +1,4 @@
+
 from dslr.maths.statistics import compute_statistics
 
 
@@ -5,8 +6,8 @@ def replace_empty_marks_with_means(
     students: list[dict],
     subjects_statistics: dict[str, dict]
 ) -> list[dict]:
-    """Remplace les notes manquantes d'un élève par la moyenne de la matière.
-    """
+    """Remplace les notes manquantes d'un élève par la moyenne de la
+    matière."""
     for student in students:
         for subject, mark in student.items():
             if (mark is None or mark == "") and subject in subjects_statistics:
@@ -18,8 +19,8 @@ def standardise_marks(
     students: list[dict],
     subjects_statistics: dict[str, dict]
 ) -> list[dict]:
-    """Standardise chaque note selon la formule Z-score: (note - mean) / std.
-    """
+    """Standardise chaque note selon la
+    formule Z-score: (note - mean) / std."""
     for student in students:
         for subject, mark in student.items():
             if subject in subjects_statistics:
